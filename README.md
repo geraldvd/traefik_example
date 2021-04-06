@@ -32,7 +32,7 @@ Added Traefik Dashboard, with authentication. Usage is the same as the previous 
 
 - Run: `export TRAEFIK_USERNAME=admin`
 - Run: `export TRAEFIK_PASSWORD=admin`
-- Run: `export TRAEFIK_HASHED_PASSWORD=$(openssl passwd -apr1 $PASSWORD)`
+- Run: `export TRAEFIK_HASHED_PASSWORD=$(openssl passwd -apr1 $TRAEFIK_PASSWORD)`
 
 Then, recreate the Traefik container:
 
