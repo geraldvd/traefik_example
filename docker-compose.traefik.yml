@@ -7,10 +7,14 @@ services:
     ports:
       # Listen on port 80, default for HTTP, necessary to redirect to HTTPS
       - 80:80
+      # Listen on port 443, default for HTTPS
+      - 443:443
     restart: always
     volumes:
       # Add Docker as a mounted volume, so that Traefik can read the labels of other services
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Mount the volume to store the certificates
+      - traefik-public-certificates:/certificates
     command: # Static configurations
       # Enable Docker in Traefik, so that it reads labels from Docker services
       - --providers.docker
@@ -18,6 +22,14 @@ services:
       - --providers.docker.exposedbydefault=false
       # Create an entrypoint "http" listening on address 80
       - --entrypoints.http.address=:80
+      # Create an entrypoint "https" listening on address 443
+      - --entrypoints.https.address=:443
+      # Create the certificate resolver "le" for Let's Encrypt
+      - --certificatesresolvers.le.acme.email=info@infundy.com
+      # Store the Let's Encrypt certificates in the mounted volume
+      - --certificatesresolvers.le.acme.storage=/certificates/acme.json
+      # Use the TLS Challenge for Let's Encrypt
+      - --certificatesresolvers.le.acme.tlschallenge=true
       # Enable the access log, with HTTP requests
       - --accesslog
       # Enable the Traefik log, for configurations and errors
@@ -26,7 +38,13 @@ services:
       # Use the public network created to be shared between Traefik and
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
-    
+
+volumes:
+  # Create a volume to store the certificates, there is a constraint to make sure
+  # Traefik is always deployed to the same Docker node with the same volume containing
+  # the HTTPS certificates
+  traefik-public-certificates:
+
 networks:
   # Use the previously created public network "traefik-public", shared with other
   # services that need to be publicly available via this Traefik
