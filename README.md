@@ -26,7 +26,7 @@ Included HTTPS to docker-compose files. Usage the same as previous step, but wit
   - Start Traefik reverse-proxy: `docker-compose -f docker-compose.traefik.yml up -d`
   - Start backend: `docker-compose -f docker-compose.yml up -d` (note: specifying yml file is needed, to avoid docker-compose.override.yml to kick in)
 
-## Docker-compose with Traefik incl. HTTPS and Traefik Dashboard (commit: `???????`)
+## Docker-compose with Traefik incl. HTTPS and Traefik Dashboard (commit: `dc31b4a`)
 
 Added Traefik Dashboard, with authentication. Usage is the same as the previous step, but first environment variables with username and password need to be set (below we use both username and password to be `admin`)
 
@@ -37,3 +37,6 @@ Added Traefik Dashboard, with authentication. Usage is the same as the previous 
 Then, recreate the Traefik container:
 
 - `docker-compose -f docker-compose.traefik.yml up -d`
+
+## Docker Swarm with Traefik (not yet working)
+Added stack.yml, but this does not work yet. When using Traefik together with backend, it always results in " 404 page not found".
